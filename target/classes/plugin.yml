@@ -1,0 +1,17 @@
+name: MyMineZ
+main: me.kitskub.myminez.MyMineZ
+version: 0.0.1
+authors: [kitskub]
+softdepend: []
+description: A plugin version of the popular DayZ mod
+
+commands:
+    mza:
+        description: admin minez command
+        usage:
+    mz:
+        description: user minez command
+        usage:
+        
+permissions:
+                        
