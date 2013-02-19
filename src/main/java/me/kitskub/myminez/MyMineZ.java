@@ -77,4 +77,7 @@ public class MyMineZ extends JavaPlugin {
 		}
 		return true;
 	}
+    
+    public static void reload() {
+    }
 }

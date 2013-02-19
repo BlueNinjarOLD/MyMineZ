@@ -87,8 +87,6 @@ public interface Game {
 	public boolean removeChest(Location loc);
 
 	public boolean removeSpawnPoint(Location loc);
-
-	public void setEnabled(boolean flag);
 	
 	public void setSpawn(Location newSpawn);
 
@@ -121,7 +119,6 @@ public interface Game {
 	public GameState getState();
 	
 	public enum GameState {
-		DISABLED,
 		DELETED,
 		STOPPED,
 		RUNNING;		

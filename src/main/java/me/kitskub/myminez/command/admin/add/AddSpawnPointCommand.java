@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 public class AddSpawnPointCommand extends PlayerCommand {
 
 	public AddSpawnPointCommand() {
-		super(Perm.ADD_SPAWNPOINT_COMMAND, Commands.ADMIN_ADD_HELP.getCommand(), "spawnpoint");
+		super(Perm.ADD_SPAWNPOINT_COMMAND, Commands.ADD_HELP.getCommand(), "spawnpoint");
 	}
 
 	@Override

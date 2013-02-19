@@ -6,7 +6,6 @@ public class Configs {
 	
         NO_PERM("You do not have permission!"),
         NOT_RUNNING("<game> is not running."),
-        NOT_ENABLED("<game> is not enabled."),
         NOT_EXIST("<item> does not exist."),
         RUNNING("<game> is running."),
         IN_GAME("You are in <game>."),
@@ -49,6 +48,8 @@ public class Configs {
         USE_SPAWN(true),
         DEATH_CANNON(0),
         LIVES(1),
+        DEFAULT_TIME(10),
+        ALLOW_TEAM(false),
         ZOMBIE_DAMAGE_MULTIPLIER(1.5);
 
 		private Object value;

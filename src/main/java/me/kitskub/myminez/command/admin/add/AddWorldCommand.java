@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 public class AddWorldCommand extends PlayerCommand {
 
 	public AddWorldCommand() {
-		super(Perm.ADD_WORLD_COMMAND, Commands.ADMIN_ADD_HELP.getCommand(), "world");
+		super(Perm.ADD_WORLD_COMMAND, Commands.ADD_HELP.getCommand(), "world");
 	}
 
 	@Override

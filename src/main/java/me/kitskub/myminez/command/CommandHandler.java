@@ -10,15 +10,18 @@ import me.kitskub.myminez.utils.ChatUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import org.apache.commons.lang.ArrayUtils;
 
 
 public class CommandHandler implements CommandExecutor {
 	private static Map<String, CommandHandler> instances = new HashMap<String, CommandHandler>();
+    private String command;
 	public Map<String, Command> commands = new HashMap<String, Command>();
 
+    public CommandHandler(String command) {
+        this.command = command;
+    }
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
 		handleCommand(sender, cmd, args);
 		return false;
@@ -34,7 +37,7 @@ public class CommandHandler implements CommandExecutor {
 	private void handleCommand(CommandSender cs, org.bukkit.command.Command cmd, String[] args) {
 		Command command = null;
 		if (args.length == 0 || (command = commands.get(args[0].toLowerCase())) == null) {
-			if (!MyMineZ.hasPermission(cs, Perm.ADMIN_HELP)) return;
+			if (!MyMineZ.hasPermission(cs, helpPerm())) return;
 			getCommand(cs, cmd);
 			return;
 		}
@@ -52,9 +55,18 @@ public class CommandHandler implements CommandExecutor {
 	public static CommandHandler getInstance(String command) {
 		CommandHandler get = instances.get(command);
 		if (get == null) {
-			instances.put(command, new CommandHandler());
+			instances.put(command, new CommandHandler(command));
 		}
 		return instances.get(command);
 	}
 
+    private Perm helpPerm() {
+        if (command.equals(MyMineZ.CMD_ADMIN)) {
+            return Perm.ADMIN_HELP;
+        }
+        else if(command.equals(MyMineZ.CMD_USER)) {
+            return Perm.USER_HELP;
+        }
+        return Perm.USER_HELP;
+    }
 }

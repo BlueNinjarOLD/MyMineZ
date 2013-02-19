@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import me.kitskub.myminez.games.MineZGame;
 import me.kitskub.myminez.utils.ChatUtils;
 
@@ -40,13 +41,12 @@ public class SessionListener implements Listener {
 	    event.setCancelled(true); // Because if not sign interacting would be handled on monitor TODO: better?
 
 	    if (game == null) {
-		    /*if (type == SessionType.SIGN_REMOVER) {
+		    if (type == SessionType.SIGN_REMOVER) {
 			    LobbyListener.removeSign(clickedBlock.getLocation());
 			    ChatUtils.send(player, "Sign has been removed.");
 			    sessions.remove(player.getName());
 			    return;
 		    }
-		    ChatUtils.error(player,"%s has been removed recently due to unknown reasons.");*/
 		    return;
 	    }
 	    if (type == SessionType.CHEST_ADDER) {
@@ -121,17 +121,6 @@ public class SessionListener implements Listener {
 			    ChatUtils.send(player, "You have removed %d spawn points from the game %s.", session.getBlocks().size(), game.getName());
 			    sessions.remove(player.getName());
 		    }
-	    }/*
-	    else if (type == SessionType.CUBOID_ADDER) {
-		    if (session.getBlocks().size() < 1) {
-			    session.clicked(clickedBlock);
-			    ChatUtils.send(player, "First corner set.");
-		    }
-		    else {
-			    game.addCuboid(session.getBlocks().get(0).getLocation(), clickedBlock.getLocation());
-			    sessions.remove(player.getName());
-			    ChatUtils.send(player, "Second corner and cuboid set.");
-		    }
 	    }
 	    else if (type == SessionType.JOIN_SIGN_ADDER) {
 		    if (LobbyListener.addJoinSign(clickedBlock.getLocation(), session.getData().get("game").toString())) {
@@ -172,7 +161,7 @@ public class SessionListener implements Listener {
 			    LobbyListener.addInfoWall(session.getBlocks().get(0).getLocation(), clickedBlock.getLocation(), event.getBlockFace(), session.getData().get("game").toString());
 			    sessions.remove(player.getName());
 		    }
-	    }*/
+	    }
 	    else {
 		    //Logging.debug("Failed to get sessionlistener.");
 	    }
@@ -193,13 +182,12 @@ public class SessionListener implements Listener {
 	public enum SessionType {
 		SPAWN_ADDER,
 		SPAWN_REMOVER,
-		CHEST_ADDER,//TODO
+		CHEST_ADDER,
 		CHEST_REMOVER,
-		//CUBOID_ADDER,//TODO
-		//JOIN_SIGN_ADDER,
-		//GAME_SIGN_ADDER,
-		//INFO_WALL_ADDER,
-		//SIGN_REMOVER;
+		JOIN_SIGN_ADDER,
+		GAME_SIGN_ADDER,
+		INFO_WALL_ADDER,
+		SIGN_REMOVER;
 	}
 	
 	private static class Session {

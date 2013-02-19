@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 public class AddGameCommand extends PlayerCommand {
 
 	public AddGameCommand() {
-		super(Perm.ADD_GAME_COMMAND, Commands.ADMIN_ADD_HELP.getCommand(), "game");
+		super(Perm.ADD_GAME_COMMAND, Commands.ADD_HELP.getCommand(), "game");
 	}
 
 	@Override

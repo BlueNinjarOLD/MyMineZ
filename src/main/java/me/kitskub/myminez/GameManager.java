@@ -239,7 +239,7 @@ public class GameManager extends me.kitskub.myminez.api.GameManager {
 	
 	@Override
 	public boolean isPlayerSubscribed(Player player, Game game) {
-		if (MyMineZ.hasPermission(player, CommandPerms.Perm.USER_AUTO_SUBSCRIBE)) return true;
+		if (MyMineZ.hasPermission(player, CommandPerms.Perm.AUTO_SUBSCRIBE)) return true;
 		if (game != null){
 			if (subscribedPlayers.get(new EquatableWeakReference<MineZGame>((MineZGame) game)) == null) {
 				subscribedPlayers.put(new EquatableWeakReference<MineZGame>(((MineZGame) game)), new HashSet<String>());

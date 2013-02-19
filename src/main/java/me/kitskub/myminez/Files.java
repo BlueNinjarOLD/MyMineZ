@@ -8,6 +8,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Files {
+    CONFIG("config.yml", FileType.YML, true),
+    LOBBY_SIGNS("lobby.yml", FileType.YML, false),
 	LOG("myminez.log", FileType.LOG, false),
     GAMES("games.yml", FileType.YML, false);
 

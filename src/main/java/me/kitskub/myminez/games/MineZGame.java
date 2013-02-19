@@ -172,7 +172,6 @@ public class MineZGame implements Comparable<MineZGame>, Game {
         if(section.isList("worlds")) {
             worlds.addAll(section.getStringList("worlds"));
         }
-		setEnabled(section.getBoolean("enabled", true));
 		if (section.contains("setup")) setup = section.getString("setup");
 		try {
 			if (section.contains("spawn")) spawn = GeneralUtils.parseToLoc(section.getString("spawn"));
@@ -187,7 +186,6 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 		ConfigurationSection spawnPointsSection = section.createSection("spawn-points");
 		ConfigurationSection chestsSection = section.createSection("chests");
 		ConfigurationSection blacklistedchestsSection = section.createSection("blacklistedchests");
-		ConfigurationSection fixedChestsSection = section.createSection("fixedchests");
 		int cntr;
 		
 		for (cntr = 0; cntr < spawnPoints.size(); cntr++) {
@@ -211,18 +209,8 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 		if (!worlds.isEmpty()) {
 			section.set("worlds", new ArrayList<String>(worlds));
 		}
-		section.set("enabled", state != DISABLED);
 		section.set("setup", setup);
 		section.set("spawn", GeneralUtils.parseToString(spawn));
-	}
-
-	public void run() {
-		if (state != RUNNING) return;
-		int size = getPlayingPlayers().size();
-		if (size < 0) {
-			Logging.debug("Game.run(): Unexpected size:" + size);
-			return;
-		}
 	}
 	
 	public int compareTo(MineZGame game) {
@@ -327,7 +315,6 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 	@Override
 	public String startGame() {
 		if (state == DELETED) return "Game no longer exists.";
-		if (state == DISABLED) return Configs.Lang.NOT_ENABLED.get(setup).replace("<game>", name);
 		if (state == RUNNING) return Configs.Lang.RUNNING.get(setup).replace("<game>", name);
 
 		fillInventories();
@@ -341,7 +328,6 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 			stats.get(playerName).setState(PlayerStat.PlayerState.PLAYING);
 		}
 		state = RUNNING;
-		run(); // Add at least one randomLoc
 		readyToPlay.clear();
 		ChatUtils.broadcast(this, "Starting %s. Go!!", name);
 		return null;
@@ -421,11 +407,11 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 
 	private synchronized boolean playerEnteringPreCheck(Player player) {
 	    if (state == DELETED) {
-		    ChatUtils.error(player, "That game does not exist anymore.");
+		    ChatUtils.error(player, Configs.Lang.NOT_EXIST.get(setup).replace("<item>", name));
 		    return false;
 	    }
-	    if (state == DISABLED) {
-		    ChatUtils.error(player, Configs.Lang.NOT_ENABLED.get(setup).replace("<game>", name));
+	    if (state == STOPPED) {
+		    ChatUtils.error(player, Configs.Lang.NOT_RUNNING.get(setup).replace("<game>", name));
 		    return false;
 	    }
 
@@ -494,9 +480,7 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 	}
 	
 	@Override
-	public synchronized boolean leave(Player player, boolean callEvent) {
-		if (state != RUNNING) return quit(player, true);
-		
+	public synchronized boolean leave(Player player, boolean callEvent) {		
 		if (!isPlaying(player)) {
 			ChatUtils.error(player, "You are not playing the game %s.", name);
 			return false;
@@ -618,7 +602,7 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 
 	@Override
 	public String getInfo() {
-		return String.format("%s[%d/%d] Enabled: %b", name, stats.size(), spawnPoints.size(), state != DISABLED);
+		return String.format("%s[%d/%d] Running: %b", name, stats.size(), spawnPoints.size(), state == RUNNING);
 	}
 
 	@Override
@@ -822,24 +806,6 @@ public class MineZGame implements Comparable<MineZGame>, Game {
 			player.getWorld().dropItemNaturally(player.getLocation(), i);
 		}
 		player.getInventory().clear();
-	}
-
-	@Override
-	public void setEnabled(boolean flag) {
-		if (state == DELETED) return;
-		if (!flag) {
-			if (!flag) stopGame(false);
-			state = DISABLED; // TODO do this better
-			for (String s : stats.keySet()) {
-				Player p = Bukkit.getPlayer(s);
-				if (p == null) continue;
-				playerLeaving(p, false);
-				teleportPlayerToSpawn(p);
-			}
-			clear();
-			state = DISABLED;
-		}
-		if (flag && state == DISABLED) state = STOPPED;
 	}
 
 	@Override
